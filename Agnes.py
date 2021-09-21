@@ -7,13 +7,6 @@ from nextcord.ext import commands
 # builtin modules
 import random
 import re
-import json
-import pytz
-import urllib
-import traceback
-from datetime import datetime, timezone
-from os import path, listdir
-from asyncio import sleep
 
 # Agnes library imports
 from AgnesUtil import AgnesUtil
