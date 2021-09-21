@@ -98,6 +98,7 @@ class AgnesUtil(Authenticator):
 
 
     def edit_quote(self, quote_id, new_quote):
+        # TODO
         dir_path = path.dirname(path.realpath(__file__))
         quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
         okay = False

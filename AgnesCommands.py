@@ -241,7 +241,7 @@ class AgnesCommands(commands.Cog):
             !addquote <Your quote here>
 
         """
-        # twitter handler
+        # twitter handler - disabled due to lack of usefulness.
         """
         try:
             if not quote.startswith('-t'):
