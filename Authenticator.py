@@ -7,9 +7,6 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-# BeautifulSoup
-from bs4 import BeautifulSoup
-
 # tweepy
 import tweepy
 
@@ -17,6 +14,7 @@ import tweepy
 import config
 
 class Authenticator:
+    """Handles all of Agnes' authentication with various services."""
     def __init__(self):
         self.sp = None
         self.sp_oauth, self.token_info = self.spot_auth()

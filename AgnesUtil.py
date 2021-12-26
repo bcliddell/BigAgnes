@@ -18,6 +18,7 @@ class AgnesUtil(Authenticator):
         self.last_quote_read = None
 
     def write_to_file(self, file, _input):
+        """Writes _input to file on a new line."""
         try:
             if '�' in _input:
                 _input.replace('�', "\'")   # sometimes apostrophes get encoded as '�' and I don't know why.
@@ -46,6 +47,7 @@ class AgnesUtil(Authenticator):
             return
 
     def getquote(self):
+        """Selects a random quote"""
         dir_path = path.dirname(path.realpath(__file__))
         quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
         with open(quote_path, 'r') as quote_file:
@@ -55,14 +57,15 @@ class AgnesUtil(Authenticator):
         return quote["quote"]
 
 
-    def get_quote_by_id(self, id):
+    def get_quote_by_id(self, id_):
+        """Fetches quote with matching integer id"""
         dir_path = path.dirname(path.realpath(__file__))
         quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
         with open(quote_path, 'r') as quote_file:
             quotes_data = json.load(quote_file)
             my_quote = 'I searched far and wide, but I couldn\'t find a quote with that ID.'
             for quote in quotes_data:
-                if quote['id'] == id:
+                if quote['id'] == id_:
                     self.last_quote_read = quote
                     my_quote = quote['quote']
                     break
@@ -84,6 +87,7 @@ class AgnesUtil(Authenticator):
 
 
     def search_quote(self, search_string):
+        """Returns a list of quotes containing search_string"""
         dir_path = path.dirname(path.realpath(__file__))
         quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
         with open(quote_path, 'r') as quote_file:
@@ -143,7 +147,7 @@ class AgnesUtil(Authenticator):
                     lnoun.append(line)
                     line = nounfile.readline()
         except FileNotFoundError:
-            print(f'A file could not be opened. Please check the directory and try again.')
+            print('A file could not be opened. Please check the directory and try again.')
             return config.error_message
         adjchoice = random.choice(ladj).strip('\n').capitalize()
         swearchoice = random.choice(lswear).strip('\n')
@@ -245,6 +249,7 @@ class AgnesUtil(Authenticator):
                 return 'Invalid syntax. Please try again.'
 
     def roll_char(self):
+        """Rolls a new D&D character's stats using the 4d6-drop-lowest method."""
         rolls = []
         for i in range(6):                         # pylint: disable=unused-variable
             temp = []
@@ -257,7 +262,9 @@ class AgnesUtil(Authenticator):
         return str(rolls).strip('[]')
 
     def tweet(self, text):
-        """Returns True and tweets if the message is OK, else returns false.
+        """OBSOLETE
+
+        Returns True and tweets if the message is OK, else returns false.
 
         Specifically, checks the length of the message and if it contains any
         forbidden words.
@@ -269,6 +276,7 @@ class AgnesUtil(Authenticator):
             if word.lower() in FORBIDDEN_WORDS:
                 return False
         """
+        raise NotImplementedError
         if any(word in text.lower() for word in config.FORBIDDEN_WORDS):
             return False
         if len(text) <= 280:
@@ -333,5 +341,6 @@ class AgnesUtil(Authenticator):
         return gifs
 
     def write_to_json(self, data, filename):
+        """Writes data as a new record to filename."""
         with open(filename, 'w') as json_file:
             json.dump(data, json_file, indent=4, default=str)

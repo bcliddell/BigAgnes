@@ -1,8 +1,3 @@
-# nextcord
-import nextcord
-import nextcord.utils
-from nextcord.ext import commands
-
 # builtin modules
 import random
 import json
@@ -12,6 +7,9 @@ from os import path
 
 # Agnes library imports
 import config
+
+# nextcord
+from nextcord.ext import commands
 
 
 class AgnesCommands(commands.Cog):
@@ -32,7 +30,7 @@ class AgnesCommands(commands.Cog):
     @commands.command(hidden=True)
     @commands.has_role('Admin')
     async def printroles(self,ctx):
-        """prints a list of your roles."""
+        """Prints a list of your roles."""
         your_id = ctx.author.id
         you = ctx.guild.get_member(your_id)
         await ctx.send(you.roles)
@@ -47,7 +45,7 @@ class AgnesCommands(commands.Cog):
 
     @commands.command()
     async def roll(self, ctx):
-        """Rolls inputted dice. Syntax is '!roll qdn + x',
+        """Rolls inputted dice. Usage is '!roll qdn + x',
         where q is the quantity of dice, n is the number of sides on the die, and x is the modifier.
         Examples of valid syntax are '!roll d20', '!roll 4d6', '!roll 2d8 + 2'."""
         roll = self.bot.utils.dice_roll(ctx.message.content)
@@ -105,7 +103,7 @@ class AgnesCommands(commands.Cog):
         """
         Records a band name for later big laughs.
 
-        Syntax:
+        Usage:
             !bandname <bandname>
         where <bandname> is the bandname you want to add to the list.
 
@@ -149,7 +147,7 @@ class AgnesCommands(commands.Cog):
         """
         Records and tweets a album name
 
-        Syntax:
+        Usage:
             !albumname <albumname>
         where <albumname> is the album name you want to add to the list.
 
@@ -182,7 +180,7 @@ class AgnesCommands(commands.Cog):
 
     @commands.command()
     async def mock(self, ctx, *, user=None):
-        """Syntax: !mock <user>. Mocks the most recent message from user.
+        """Usage: !mock <user>. Mocks the most recent message from user.
         If no user is specified, mocks the most recent message.
         """
         # TODO: this is a bit inefficient considering no one ever gives a
@@ -221,12 +219,12 @@ class AgnesCommands(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.has_role('Admin')
-    async def getquotebyid(self, ctx, id):
+    async def getquotebyid(self, ctx, id_):
         """Retrieves quote with matching id, if found.
         id must be type int.
         """
-        id = int(id)
-        quote = self.bot.utils.get_quote_by_id(id)
+        id_ = int(id_)
+        quote = self.bot.utils.get_quote_by_id(id_)
         await ctx.send(quote)
 
 
@@ -247,7 +245,7 @@ class AgnesCommands(commands.Cog):
         """
         Records a quote to record for big laughs later.
 
-        Syntax:
+        Usage:
             !addquote <Your quote here>
 
         """
@@ -282,8 +280,8 @@ class AgnesCommands(commands.Cog):
                         author = ctx.message.author.name
                 date = ctx.message.created_at
                 date_tz = date.replace(tzinfo=timezone.utc).astimezone(tz=pytz.timezone('US/Mountain')).strftime("%Y-%m-%d %H:%M:%S")
-                id = len(data) + 1
-                to_add = {'quote': f'{quote}', 'timestamp': f'{date_tz}', 'author': f'{author}', 'id': f'{id}'}
+                id_ = len(data) + 1
+                to_add = {'quote': f'{quote}', 'timestamp': f'{date_tz}', 'author': f'{author}', 'id': f'{id_}'}
                 data.append(to_add)
             self.bot.utils.write_to_json(data, quote_path)
         except Exception as e:
@@ -345,7 +343,7 @@ class AgnesCommands(commands.Cog):
     async def theycalledme(self, ctx, *, name):
         """Records a thing that they called you in high school.
 
-        Syntax:
+        Usage:
             !theycalledme <name>
         where <name> is the thing you want added to the list.
         """
