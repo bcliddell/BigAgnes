@@ -120,19 +120,23 @@ class AgnesUtil(Authenticator):
         and returns them as a single string.
         """
         try:
-            with open(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\adjectives curated.txt', 'r') as adjfile:
+            dir_path = path.dirname(path.realpath(__file__))
+            adj_path = path.join(dir_path, r'.\txt_files\adjectives curated.txt')
+            with open(adj_path, 'r') as adjfile:
                 ladj = []
                 line = adjfile.readline()
                 while line:
                     ladj.append(line)
                     line = adjfile.readline()
-            with open(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\swear words.txt', 'r') as swearfile:
+            swear_path = path.join(dir_path, r'.\txt_files\swear words.txt')
+            with open(swear_path, 'r') as swearfile:
                 lswear = []
                 line = swearfile.readline()
                 while line:
                     lswear.append(line)
                     line = swearfile.readline()
-            with open(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\nouns curated.txt', 'r') as nounfile:
+            noun_path = path.join(dir_path, r'.\txt_files\nouns curated.txt')
+            with open(noun_path, 'r') as nounfile:
                 lnoun = []
                 line = nounfile.readline()
                 while line:
@@ -159,7 +163,9 @@ class AgnesUtil(Authenticator):
         # track_id has to be a list in order to be an acceptable arg to user_playlist_add_tracks()
         track_id = [uri]
         results = self.sp.user_playlist_add_tracks(config.USER, config.PLAY_LIST, track_id)    # pylint: disable=unused-variable
-        with open(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\spotify_uri_log.txt', 'a') as uri_log_file:
+        dir_path = path.dirname(path.realpath(__file__))
+        log_path = path.join(dir_path, r'.\txt_files\spotify_uri_log.txt')
+        with open(log_path, 'a') as uri_log_file:
             uri_log_file.write(f'{uri}\n')
         track_info = self.sp.track(uri)
         name = track_info['name']

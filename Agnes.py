@@ -1,3 +1,7 @@
+"""
+TODO: change absolute file paths in all py files to relative paths.
+"""
+
 # nextcord
 import nextcord
 import nextcord.utils

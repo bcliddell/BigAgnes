@@ -20,6 +20,7 @@ class AgnesCommands(commands.Cog):
     """
     def __init__(self, bot):
         self.bot = bot
+        self.dir_path = path.dirname(path.realpath(__file__))
 
     async def is_owner(self, ctx):
         """
@@ -83,7 +84,8 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def hiskme(self, ctx):
         """Generates and prints a JT Hiskey quote"""
-        quote = self.bot.utils.random_from_file(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\hiskey.txt')
+        hisk_path = path.join(self.dir_path, r'.\txt_files\hiskey.txt')
+        quote = self.bot.utils.random_from_file(hisk_path)
         await ctx.send(quote)
 
     @commands.command()
@@ -94,7 +96,8 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def mulaneyme(self, ctx):
         """Prints a random John Mulaney quote."""
-        quote = self.bot.utils.random_from_file(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\mulaney.txt')
+        mulaney_path = path.join(self.dir_path, r'.\txt_files\mulaney.txt')
+        quote = self.bot.utils.random_from_file(mulaney_path)
         await ctx.send(f'{quote}')
 
     @commands.command()
@@ -123,7 +126,8 @@ class AgnesCommands(commands.Cog):
             await ctx.send('Something went wrong trying to tweet that.')
         """
         try:
-            with open(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\bandnames.txt', 'a') as outfile:
+            bandname_path = path.join(self.dir_path, r'.\txt_files\bandnames.txt')
+            with open(bandname_path, 'a') as outfile:
                 if bandname.startswith('-t'):
                     bandname = bandname[3:]
                 outfile.write(f'{bandname}\n')
@@ -136,7 +140,8 @@ class AgnesCommands(commands.Cog):
     @commands.command(aliases=['givbandname', 'givebandnam'])
     async def givebandname(self, ctx):
         """Prints a random band name from the list."""
-        bandname = self.bot.utils.random_from_file(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\bandnames.txt')
+        bandname_path = path.join(self.dir_path, r'.\txt_files\bandnames.txt')
+        bandname = self.bot.utils.random_from_file(bandname_path)
         await ctx.send(bandname.capitalize())
 
     @commands.command()
@@ -152,7 +157,8 @@ class AgnesCommands(commands.Cog):
         or if it contains unallowed words.
         """
         try:
-            with open(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\albumnames.txt', 'a') as outfile:
+            albumname_path = path.join(self.dir_path, r'.\txt_files\albumnames.txt')
+            with open(albumname_path, 'a') as outfile:
                 if albumname.startswith('-t'):
                     albumname = albumname[3:]
                 outfile.write(f'{albumname}\n')
@@ -165,7 +171,8 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def givealbumname(self, ctx):
         """Prints a random album name from the list."""
-        albumname = self.bot.utils.random_from_file(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\albumnames.txt')
+        albumname_path = path.join(self.dir_path, r'.\txt_files\albumnames.txt')
+        albumname = self.bot.utils.random_from_file(albumname_path)
         await ctx.send(albumname.capitalize())
 
     @commands.command()
@@ -178,6 +185,8 @@ class AgnesCommands(commands.Cog):
         """Syntax: !mock <user>. Mocks the most recent message from user.
         If no user is specified, mocks the most recent message.
         """
+        # TODO: this is a bit inefficient considering no one ever gives a
+        # user argument.
         messages = await ctx.channel.history(limit=100).flatten()
         messages = messages[1:]     # excludes the most recent message
                                     # because it is the one invoking the command.
@@ -199,7 +208,8 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def beemovie(self, ctx):
         """Prints the beemovie script!!!"""
-        with open(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\beemovie.txt', 'r') as beemovie:
+        beemovie_path = path.join(self.dir_path, r'.\txt_files\beemovie.txt')
+        with open(beemovie_path, 'r') as beemovie:
             line = beemovie.readline()
             await ctx.send(line)
 
@@ -259,8 +269,7 @@ class AgnesCommands(commands.Cog):
         try:
             if quote.startswith('-t'):
                 quote = quote[3:]
-            dir_path = path.dirname(path.realpath(__file__))
-            quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
+            quote_path = path.join(self.dir_path, '.\\txt_files\\quotes.json')
             with open(quote_path, 'r') as json_file:
                 #data = json.load(json_file)
                 # quotes = data['quotes']
@@ -320,7 +329,7 @@ class AgnesCommands(commands.Cog):
         quote_str = f'Quote number {quote_data["id"]}, \"{quote_data["quote"]}\" was added by {author} at {timestamp}'
         await ctx.send(quote_str)
 
-    @commands.command()
+    @commands.command(hidden=True)
     async def twitter(self, ctx):
         """Prints Agnes' twitter handle and url."""
         await ctx.send('@BigAgnesBot https://twitter.com/BigAgnesBot')
@@ -328,7 +337,8 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def whatdidtheycallme(self, ctx):
         """Prints a random thing they called you in high school."""
-        name = self.bot.utils.random_from_file(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\theycalledme.txt')
+        name_path = path.join(self.dir_path, r'.\txt_files\theycalledme.txt')
+        name = self.bot.utils.random_from_file(name_path)
         await ctx.send(name)
 
     @commands.command()
@@ -340,7 +350,8 @@ class AgnesCommands(commands.Cog):
         where <name> is the thing you want added to the list.
         """
         try:
-            self.bot.utils.write_to_file(r'C:\Users\Tanner\Google Drive\Python\For fun\Discord Bot\txt_files\theycalledme.txt', name)
+            name_path = path.join(self.dir_path, r'.\txt_files\theycalledme.txt')
+            self.bot.utils.write_to_file(name_path, name)
             await ctx.message.add_reaction('👍')
             print(f'Added that\'s what they called me: {name}')
         except:
