@@ -43,8 +43,8 @@ class Agnes(commands.Bot):
         spot_regex = re.compile(r'(https://open.spotify.com/track/)(.*)(\?)(.*)')
 
         # -----Bookkeeping ifs-----
-        if message.author == self.user:
-            # prevents the bot from responding to itself
+        if message.author == self.user or message.author.bot:
+            # prevents the bot from responding to itself or other bots
             return
         if x == 10:
             # a 5% chance of responding with the :thank: emoji
