@@ -2,6 +2,7 @@
 import random
 import json
 import pytz
+import time
 from datetime import timezone
 from os import path
 
@@ -379,3 +380,16 @@ class AgnesCommands(commands.Cog):
         """Admin commands. Returns usernames and IDs for all users in ctx."""
         for user in ctx.message.channel.members:
             await ctx.send(f'{user.name}: {user.id}')
+
+    @commands.command(name="benchmark", hidden=True)
+    @commands.has_role('Admin')
+    async def __benchmark(self, ctx):
+        loops = 1000000000
+        await ctx.send(f"Starting a performance benchmark with {loops} loops...")
+        begin = time.perf_counter()
+        j = 0
+        for i in range(1000000000):
+            j += 1
+        end = time.perf_counter()
+        elapsed_time = (end - begin) * 1000
+        await ctx.send(f'{loops} loops finished in {elapsed_time} ms')
