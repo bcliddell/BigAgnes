@@ -62,7 +62,8 @@ class Authenticator:
         return api
 
     def spotify_refresh(self, sp_oauth):
-        """Refreshes the Spotify access token, since it expires every hour."""
+        """Refreshes the Spotify access token, since it expires every hour.
+        TODO: This doesn't work. Make sure that it's refreshing the Access Token correctly."""
         if sp_oauth.is_token_expired(self.token_info):
             print('Attempting to refresh access token...')
             self.token_info = sp_oauth.refresh_access_token(self.token_info['refresh_token'])
