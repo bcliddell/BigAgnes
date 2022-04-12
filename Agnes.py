@@ -39,14 +39,14 @@ class Agnes(commands.Bot):
         # this is necessary to make @bot.event functions and @bot.command() functs compatible
         await self.process_commands(message)
 
-        x = random.randint(1, 20)
+        x = random.randint(1, 250)
         spot_regex = re.compile(r'(https://open.spotify.com/track/)(.*)(\?)(.*)')
 
         # -----Bookkeeping ifs-----
         if message.author == self.user or message.author.bot:
             # prevents the bot from responding to itself or other bots
             return
-        if x == 10:
+        if x == 1:
             # a 5% chance of responding with the :thank: emoji
             emoji = '<:thank:592156422150684712>'
             await message.add_reaction(emoji)
