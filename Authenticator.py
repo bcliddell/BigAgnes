@@ -1,3 +1,5 @@
+from os import path
+
 # spotipy
 import spotipy
 from spotipy import oauth2
@@ -29,6 +31,7 @@ class Authenticator:
                                 client_secret=config.CLIENT_SECRET,
                                 redirect_uri=config.REDIRECT_URI,
                                 scope=config.SCOPE)
+        sp_oauth.cache_handler.cache_path = path.join(path.dirname(path.realpath(__file__)), '.\\.cache');
         token_info = sp_oauth.get_cached_token()    # fetches cached token info from .cache
         if not token_info:                          # if cache not found, logs into spotify with selenium
             auth_url = sp_oauth.get_authorize_url()
