@@ -31,21 +31,15 @@ class Authenticator:
                                 client_secret=config.CLIENT_SECRET,
                                 redirect_uri=config.REDIRECT_URI,
                                 scope=config.SCOPE)
-        sp_oauth.cache_handler.cache_path = path.join(path.dirname(path.realpath(__file__)), '.\\.cache');
-        token_info = sp_oauth.get_cached_token()    # fetches cached token info from .cache
-        if not token_info:                          # if cache not found, logs into spotify with selenium
-            auth_url = sp_oauth.get_authorize_url()
-            options = webdriver.FirefoxOptions()
-            options.add_argument('--headless')
-            driver = webdriver.Firefox(options=options, service_log_path=None)
-            driver.get(auth_url)
-            driver.find_element_by_id('login-username').send_keys(config.SPOT_USERNAME)
-            driver.find_element_by_id('login-password').send_keys(config.SPOT_PASSWORD)
-            driver.find_element_by_id('login-button').click()
-            WebDriverWait(driver, 10).until(expected_conditions.title_is('Problem loading page'))
-            response = driver.current_url
-            driver.quit()
+        cache_path = path.join(path.dirname(path.realpath(__file__)), '.\\.cache')
+        sp_oauth.cache_handler.cache_path = cache_path
+        if path.exists(cache_path):
+            token_info = sp_oauth.get_cached_token()    # fetches cached token info from .cache
+        else:
+            token_info = None
 
+        if not token_info:      # if cache not found, logs into spotify with selenium
+            response = self.spot_web_login(sp_oauth)
             code = sp_oauth.parse_response_code(response)
             token_info = sp_oauth.get_access_token(code)
             token = token_info['access_token']
@@ -56,13 +50,23 @@ class Authenticator:
         print('Authenticated with Spotify.')
         return sp_oauth, token_info
 
-    def twitter_auth(self):
-        """Authenticates on Twitter."""
-        auth = tweepy.OAuthHandler(config.TWITTER_CONSUMER_KEY, config.TWITTER_CONSUMER_SECRET)
-        auth.set_access_token(config.TW_ACCESS_TOKEN, config.TW_ACCESS_TOKEN_SECRET)
-        api = tweepy.API(auth)
-        print('Authenticated with Twitter.')
-        return api
+    def spot_web_login(self, sp_oauth):
+        """
+        Logs into Spotify via web browser. Returns Spotify API's response.
+        """
+        print("Logging into Spotify...")
+        auth_url = sp_oauth.get_authorize_url()
+        options = webdriver.FirefoxOptions()
+        options.add_argument('--headless')
+        driver = webdriver.Firefox(options=options, service_log_path=None)
+        driver.get(auth_url)
+        driver.find_element_by_id('login-username').send_keys(config.SPOT_USERNAME)
+        driver.find_element_by_id('login-password').send_keys(config.SPOT_PASSWORD)
+        driver.find_element_by_id('login-button').click()
+        WebDriverWait(driver, 10).until(expected_conditions.title_is('Problem loading page'))
+        response = driver.current_url
+        driver.quit()
+        return response
 
     def spotify_refresh(self):
         """Refreshes the Spotify access token, since it expires every hour."""
@@ -71,3 +75,11 @@ class Authenticator:
             self.token_info = self.sp_oauth.refresh_access_token(self.token_info['refresh_token'])
             token = self.token_info['access_token']
             self.sp = spotipy.Spotify(auth=token)
+
+    def twitter_auth(self):
+        """Authenticates on Twitter."""
+        auth = tweepy.OAuthHandler(config.TWITTER_CONSUMER_KEY, config.TWITTER_CONSUMER_SECRET)
+        auth.set_access_token(config.TW_ACCESS_TOKEN, config.TW_ACCESS_TOKEN_SECRET)
+        api = tweepy.API(auth)
+        print('Authenticated with Twitter.')
+        return api
