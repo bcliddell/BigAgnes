@@ -9,12 +9,12 @@ from Authenticator import Authenticator
 import config
 
 
-class AgnesUtil(Authenticator):
+class AgnesUtil:
     """Contains various utility functions used across various Agnes objects.
     Is inherited (composition) by Agnes.
     """
     def __init__(self):
-        super().__init__()
+        self.authenticator = Authenticator()
         self.last_quote_read = None
 
     def write_to_file(self, file, _input):
@@ -162,16 +162,16 @@ class AgnesUtil(Authenticator):
         """Refreshes Spotify token, then adds songs to the "Hey Dude Check Out This
         Song" playlist.
         """
-        self.spotify_refresh(self.sp_oauth)
+        self.authenticator.spotify_refresh()
         uri = f'spotify:track:{url}'
         # track_id has to be a list in order to be an acceptable arg to user_playlist_add_tracks()
         track_id = [uri]
-        results = self.sp.user_playlist_add_tracks(config.USER, config.PLAY_LIST, track_id)    # pylint: disable=unused-variable
+        results = self.authenticator.sp.user_playlist_add_tracks(config.USER, config.PLAY_LIST, track_id)    # pylint: disable=unused-variable
         dir_path = path.dirname(path.realpath(__file__))
         log_path = path.join(dir_path, r'.\txt_files\spotify_uri_log.txt')
         with open(log_path, 'a') as uri_log_file:
             uri_log_file.write(f'{uri}\n')
-        track_info = self.sp.track(uri)
+        track_info = self.authenticator.sp.track(uri)
         name = track_info['name']
         artist = track_info['artists'][0]['name']
         print(f'Added {name} by {artist} to hey-dude-check-out-this-song.')
@@ -269,18 +269,11 @@ class AgnesUtil(Authenticator):
         Specifically, checks the length of the message and if it contains any
         forbidden words.
         """
-        """
-        # deprecated:
-        words = text.split()
-        for word in words:
-            if word.lower() in FORBIDDEN_WORDS:
-                return False
-        """
         raise NotImplementedError
         if any(word in text.lower() for word in config.FORBIDDEN_WORDS):
             return False
         if len(text) <= 280:
-            self.twitter_api.update_status(text)
+            self.authenticator.twitter_api.update_status(text)
             return True
         return False
 

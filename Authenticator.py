@@ -19,7 +19,7 @@ class Authenticator:
         self.sp = None
         self.sp_oauth, self.token_info = self.spot_auth()
         # self.twitter_api is the object that handles actual interfacing with twitter
-        self.twitter_api = self.twitter_auth()
+        # self.twitter_api = self.twitter_auth()    // disabled because it's unused
 
     def spot_auth(self):
         """Authenticates with Spotify's API and returns sp_oauth, which is an
@@ -61,11 +61,11 @@ class Authenticator:
         print('Authenticated with Twitter.')
         return api
 
-    def spotify_refresh(self, sp_oauth):
+    def spotify_refresh(self):
         """Refreshes the Spotify access token, since it expires every hour.
         TODO: This doesn't work. Make sure that it's refreshing the Access Token correctly."""
-        if sp_oauth.is_token_expired(self.token_info):
-            print('Attempting to refresh access token...')
-            self.token_info = sp_oauth.refresh_access_token(self.token_info['refresh_token'])
+        if self.sp_oauth.is_token_expired(self.token_info):
+            print('Attempting to refresh Spotify access token...')
+            self.token_info = self.sp_oauth.refresh_access_token(self.token_info['refresh_token'])
             token = self.token_info['access_token']
             self.sp = spotipy.Spotify(auth=token)
