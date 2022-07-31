@@ -1,0 +1,6 @@
+nextcord>=2.0.0
+selenium>=4.3.0
+spotipy>=2.20.0
+pytz>=2022.1
+tweepy>=4.10.0
+urllib3>=1.26.11
