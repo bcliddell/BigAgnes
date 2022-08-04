@@ -326,7 +326,7 @@ class AgnesUtil:
     """
     def scrape_gifs(self, n_gifs=5):
         """Scrapes the top n_gifs gifs from giphy's trending page."""
-        url = f"http://api.giphy.com/v1/gifs/search?q=reaction&api_key=0aklWITv0o79rS6a3GjkCKbNG5jekF3r&limit={n_gifs}"
+        url = f"http://api.giphy.com/v1/gifs/search?q=reaction&api_key={config.GIPHY_API_KEY}&limit={n_gifs}"
         with urllib.request.urlopen(url) as response:
             response_data = json.loads(response.read())
         gif_data = response_data['data']
