@@ -22,6 +22,7 @@ class Agnes(commands.Bot):
         intents = nextcord.Intents.default()
         intents.members = True
         intents.presences = True
+        intents.message_content = True
         super().__init__(command_prefix=['!', 'Agnes, '], intents=intents)
         print('hello world!')
         # utils contains auth and util functions used inside Bot commands
