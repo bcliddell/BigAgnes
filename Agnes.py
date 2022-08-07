@@ -65,7 +65,7 @@ class Agnes(commands.Bot):
             if x == 1:
                 await message.channel.send(f'I eat ass {message.author.mention}')
             elif x == 2:
-                await message.channel.send(f'You\'re being really clingy, {message.author.mention}. This isn\'t a good look on you.')
+                await message.channel.send(f'Oh, um, well, I think we should just be friends, {message.author.mention}.')
             else:
                 await message.channel.send(f'I love you {message.author.mention}')
         if 'sentient' in message.content.lower():
