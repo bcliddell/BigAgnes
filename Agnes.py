@@ -56,6 +56,8 @@ class Agnes(commands.Bot):
         if 'acquiesce' in message.content:
             # prints on trigger word 'acquiesce'
             await message.channel.send('A C Q U I E S C E')
+        if 'i\'m coming' in message.content.lower() or 'i\'m comin' in message.content.lower():
+            await message.channel.send('Are you also on your way?')
         if message.content.lower() in config.SWEARS:
             # prints on trigger word from swears list. Does not work in a sentence.
             await message.channel.send('Please don\'t fucking swear.')
