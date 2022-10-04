@@ -1,4 +1,5 @@
 # builtin Python modules
+from email.quoprimime import quote
 import random
 import json
 import urllib
@@ -48,8 +49,7 @@ class AgnesUtil:
 
     def getquote(self):
         """Selects a random quote"""
-        dir_path = path.dirname(path.realpath(__file__))
-        quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
+        quote_path = self.get_normalized_full_path('./txt_files/quotes.json')
         with open(quote_path, 'r') as quote_file:
             quotes_data = json.load(quote_file)
             quote = random.choice(quotes_data)
@@ -59,8 +59,7 @@ class AgnesUtil:
 
     def get_quote_by_id(self, id_):
         """Fetches quote with matching integer id"""
-        dir_path = path.dirname(path.realpath(__file__))
-        quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
+        quote_path = self.get_normalized_full_path('./txt_files/quotes.json')
         with open(quote_path, 'r') as quote_file:
             quotes_data = json.load(quote_file)
             my_quote = 'I searched far and wide, but I couldn\'t find a quote with that ID.'
@@ -73,8 +72,7 @@ class AgnesUtil:
 
 
     def get_quote_info(self, quote_text):
-        dir_path = path.dirname(path.realpath(__file__))
-        quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
+        quote_path = self.get_normalized_full_path('./txt_files/quotes.json')
         with open(quote_path, 'r') as quote_file:
             quotes_data = json.load(quote_file)
             my_quote = 'I searched far and wide but I couldn\'t find anything.'
@@ -88,8 +86,7 @@ class AgnesUtil:
 
     def search_quote(self, search_string):
         """Returns a list of quotes containing search_string"""
-        dir_path = path.dirname(path.realpath(__file__))
-        quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
+        quote_path = self.get_normalized_full_path('./txt_files/quotes.json')
         with open(quote_path, 'r') as quote_file:
             quotes_data = json.load(quote_file)
             matches = [quote['quote'] for quote in quotes_data if search_string in quote['quote'].lower()]
@@ -103,8 +100,7 @@ class AgnesUtil:
 
     def edit_quote(self, quote_id, new_quote):
         # TODO
-        dir_path = path.dirname(path.realpath(__file__))
-        quote_path = path.join(dir_path, '.\\txt_files\\quotes.json')
+        quote_path = self.get_normalized_full_path('./txt_files/quotes.json')
         okay = False
         with open(quote_path, 'r') as quote_file:
             quotes_data = json.load(quote_file)
@@ -124,22 +120,21 @@ class AgnesUtil:
         and returns them as a single string.
         """
         try:
-            dir_path = path.dirname(path.realpath(__file__))
-            adj_path = path.join(dir_path, r'.\txt_files\adjectives curated.txt')
+            adj_path = self.get_normalized_full_path('./txt_files/adjectives curated.txt')
             with open(adj_path, 'r') as adjfile:
                 ladj = []
                 line = adjfile.readline()
                 while line:
                     ladj.append(line)
                     line = adjfile.readline()
-            swear_path = path.join(dir_path, r'.\txt_files\swear words.txt')
+            swear_path = self.get_normalized_full_path('./txt_files/swear words.txt')
             with open(swear_path, 'r') as swearfile:
                 lswear = []
                 line = swearfile.readline()
                 while line:
                     lswear.append(line)
                     line = swearfile.readline()
-            noun_path = path.join(dir_path, r'.\txt_files\nouns curated.txt')
+            noun_path = self.get_normalized_full_path('./txt_files/nouns curated.txt')
             with open(noun_path, 'r') as nounfile:
                 lnoun = []
                 line = nounfile.readline()
@@ -167,8 +162,7 @@ class AgnesUtil:
         # track_id has to be a list in order to be an acceptable arg to user_playlist_add_tracks()
         track_id = [uri]
         results = self.authenticator.sp.user_playlist_add_tracks(config.USER, config.PLAY_LIST, track_id)    # pylint: disable=unused-variable
-        dir_path = path.dirname(path.realpath(__file__))
-        log_path = path.join(dir_path, r'.\txt_files\spotify_uri_log.txt')
+        log_path = self.get_normalized_full_path('./txt_files/spotify_uri_log.txt')
         with open(log_path, 'a') as uri_log_file:
             uri_log_file.write(f'{uri}\n')
         track_info = self.authenticator.sp.track(uri)
@@ -337,3 +331,8 @@ class AgnesUtil:
         """Writes data as a new record to filename."""
         with open(filename, 'w') as json_file:
             json.dump(data, json_file, indent=4, default=str)
+
+    def get_normalized_full_path(self, rel_path):
+        dir_path = path.dirname(path.realpath(__file__))
+        full_path = path.normpath(path.join(dir_path, rel_path))
+        return full_path

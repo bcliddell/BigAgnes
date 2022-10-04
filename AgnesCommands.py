@@ -28,6 +28,10 @@ class AgnesCommands(commands.Cog):
         """
         return ctx.author.id == config.GOD_ID
 
+    def get_normalized_full_path(self, rel_path):
+        full_path = path.normpath(path.join(self.dir_path, rel_path))
+        return full_path
+
     @commands.command(hidden=True)
     @commands.has_role('Admin')
     async def printroles(self,ctx):
@@ -83,7 +87,7 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def hiskme(self, ctx):
         """Generates and prints a JT Hiskey quote"""
-        hisk_path = path.join(self.dir_path, r'.\txt_files\hiskey.txt')
+        hisk_path = self.get_normalized_full_path('./txt_files/hiskey.txt')
         quote = self.bot.utils.random_from_file(hisk_path)
         await ctx.send(quote)
 
@@ -95,7 +99,7 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def mulaneyme(self, ctx):
         """Prints a random John Mulaney quote."""
-        mulaney_path = path.join(self.dir_path, r'.\txt_files\mulaney.txt')
+        mulaney_path = self.get_normalized_full_path('./txt_files/mulaney.txt')
         quote = self.bot.utils.random_from_file(mulaney_path)
         await ctx.send(f'{quote}')
 
@@ -125,7 +129,7 @@ class AgnesCommands(commands.Cog):
             await ctx.send('Something went wrong trying to tweet that.')
         """
         try:
-            bandname_path = path.join(self.dir_path, r'.\txt_files\bandnames.txt')
+            bandname_path = self.get_normalized_full_path('./txt_files/bandnames.txt')
             with open(bandname_path, 'a') as outfile:
                 if bandname.startswith('-t'):
                     bandname = bandname[3:]
@@ -139,7 +143,7 @@ class AgnesCommands(commands.Cog):
     @commands.command(aliases=['givbandname', 'givebandnam'])
     async def givebandname(self, ctx):
         """Prints a random band name from the list."""
-        bandname_path = path.join(self.dir_path, r'.\txt_files\bandnames.txt')
+        bandname_path = self.get_normalized_full_path('./txt_files/bandnames.txt')
         bandname = self.bot.utils.random_from_file(bandname_path)
         await ctx.send(bandname.capitalize())
 
@@ -156,7 +160,7 @@ class AgnesCommands(commands.Cog):
         or if it contains unallowed words.
         """
         try:
-            albumname_path = path.join(self.dir_path, r'.\txt_files\albumnames.txt')
+            albumname_path = self.get_normalized_full_path('./txt_files/albumnames.txt')
             with open(albumname_path, 'a') as outfile:
                 if albumname.startswith('-t'):
                     albumname = albumname[3:]
@@ -170,7 +174,7 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def givealbumname(self, ctx):
         """Prints a random album name from the list."""
-        albumname_path = path.join(self.dir_path, r'.\txt_files\albumnames.txt')
+        albumname_path = self.get_normalized_full_path('./txt_files/albumnames.txt')
         albumname = self.bot.utils.random_from_file(albumname_path)
         await ctx.send(albumname.capitalize())
 
@@ -207,7 +211,7 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def beemovie(self, ctx):
         """Prints the beemovie script!!!"""
-        beemovie_path = path.join(self.dir_path, r'.\txt_files\beemovie.txt')
+        beemovie_path = self.get_normalized_full_path('./txt_files/beemovie.txt')
         with open(beemovie_path, 'r') as beemovie:
             line = beemovie.readline()
             await ctx.send(line)
@@ -268,7 +272,7 @@ class AgnesCommands(commands.Cog):
         try:
             if quote.startswith('-t'):
                 quote = quote[3:]
-            quote_path = path.join(self.dir_path, '.\\txt_files\\quotes.json')
+            quote_path = self.get_normalized_full_path('./txt_files/quotes.json')
             with open(quote_path, 'r') as json_file:
                 #data = json.load(json_file)
                 # quotes = data['quotes']
@@ -336,7 +340,7 @@ class AgnesCommands(commands.Cog):
     @commands.command()
     async def whatdidtheycallme(self, ctx):
         """Prints a random thing they called you in high school."""
-        name_path = path.join(self.dir_path, r'.\txt_files\theycalledme.txt')
+        name_path = self.get_normalized_full_path('./txt_files/theycalledme.txt')
         name = self.bot.utils.random_from_file(name_path)
         await ctx.send(name)
 
@@ -349,7 +353,7 @@ class AgnesCommands(commands.Cog):
         where <name> is the thing you want added to the list.
         """
         try:
-            name_path = path.join(self.dir_path, r'.\txt_files\theycalledme.txt')
+            name_path = self.get_normalized_full_path('./txt_files/theycalledme.txt')
             self.bot.utils.write_to_file(name_path, name)
             await ctx.message.add_reaction('👍')
             print(f'Added that\'s what they called me: {name}')
